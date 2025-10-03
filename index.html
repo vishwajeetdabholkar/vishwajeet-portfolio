@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Vishwajeet Dabholkar — Agentic AI, MCP, Real-time RAG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0f14" />
+  <meta name="description" content="GenAI, Agentic AI, MCP server/client, and real-time RAG systems by Vishwajeet Dabholkar. Open source tooling, agent protocols, and next-level project drops." />
+  <meta property="og:title" content="Vishwajeet Dabholkar — Agentic AI, MCP, Real-time RAG" />
+  <meta property="og:description" content="Building next-level agents, MCP protocol servers/clients, and state-of-the-art RAG solutions." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://vishwajeetdabholkar.ai/og.jpg" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --bg-soft:#0e141c;
+      --card:#0d1219;
+      --text:#e6f1ff;
+      --muted:#9bb3c7;
+      --accent:#00e0ff;
+      --accent-2:#9d6cff;
+      --ok:#00ffa3;
+      --warn:#ffd166;
+      --danger:#ff5370;
+      --glow:0 0 24px rgba(0,224,255,0.18);
+      --ring:0 0 0 1px rgba(0,224,255,0.25), 0 0 26px rgba(0,224,255,0.15) inset;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    html,body{height:100%}
+    body{ 
+      margin:0;background:radial-gradient(1200px 600px at 70% -10%,rgba(0,224,255,0.07),transparent),
+                radial-gradient(900px 500px at 10% 10%,rgba(157,108,255,0.06),transparent),
+                var(--bg);
+      color:var(--text); font-family:Space Grotesk, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      line-height:1.5;
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1200px;margin:0 auto;padding:32px 20px 100px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:14px}
+    .dot{
+      width:14px;height:14px;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, #64f8ff, #00e0ff);
+      box-shadow:0 0 22px rgba(0,224,255,0.55), inset 0 0 14px rgba(0,224,255,0.4);
+      animation:pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+    .brand h1{font-size:18px;margin:0;letter-spacing:.4px}
+    nav{display:flex;gap:8px;flex-wrap:wrap}
+    nav a{margin-left:0;padding:8px 14px;color:var(--muted);border-radius:8px;transition:all .2s ease}
+    nav a:hover{color:var(--text);background:rgba(0,224,255,0.08);text-decoration:none}
+    nav a.active{color:var(--text)}
+    @media (max-width:700px){
+      header{flex-direction:column;align-items:flex-start}
+      nav{width:100%}
+    }
+    .hero{
+      margin-top:24px;display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:stretch
+    }
+    @media (max-width:900px){.hero{grid-template-columns:1fr}}
+    .hero-card{
+      border:1px solid rgba(255,255,255,0.06);
+      background:linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0)) , rgba(20,26,34,0.5);
+      backdrop-filter: blur(8px);
+      border-radius:var(--radius); padding:32px; position:relative; overflow:hidden;
+      box-shadow: var(--glow);
+    }
+    .scanline::after{
+      content:""; position:absolute; inset:0 0 auto 0; height:1px;
+      background:linear-gradient(90deg, transparent, rgba(0,224,255,0.6), transparent);
+      opacity:.4; animation: sweep 6s linear infinite;
+    }
+    @keyframes sweep{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+    h2.title{margin:0 0 8px 0; font-size:38px; letter-spacing:.5px}
+    .subtitle{color:var(--muted); margin-bottom:22px; max-width:60ch}
+    .badges{display:flex;flex-wrap:wrap; gap:10px; margin:20px 0 28px}
+    .badge{
+      font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:12px; padding:8px 10px; border-radius:999px;
+      background:rgba(0,224,255,0.06); color:#bdefff; border:1px solid rgba(0,224,255,0.2)
+    }
+    .cta{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      background:linear-gradient(180deg, rgba(0,224,255,0.22), rgba(0,224,255,0.06));
+      color:var(--text); border:1px solid rgba(0,224,255,0.35);
+      padding:12px 16px; border-radius:12px; text-decoration:none;
+      box-shadow: var(--glow);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .btn:hover{transform:translateY(-1px); box-shadow: 0 0 34px rgba(0,224,255,0.25)}
+    .btn.alt{
+      background:linear-gradient(180deg, rgba(157,108,255,0.22), rgba(157,108,255,0.06));
+      border-color: rgba(157,108,255,0.35);
+      box-shadow: 0 0 24px rgba(157,108,255,0.18);
+    }
+    /* Agent console */
+    .console{
+      font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: radial-gradient(800px 300px at 100% 0%, rgba(0,224,255,0.07), transparent), var(--card);
+      border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius); padding:18px; height:100%;
+      display:flex; flex-direction:column; gap:10px; position:relative; overflow:hidden;
+    }
+    .console .hdr{display:flex; gap:10px; align-items:center; color:var(--muted); font-size:12px}
+    .led{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+    .log{flex:1; overflow:auto; padding-right:4px}
+    .line{white-space:pre-wrap; word-break:break-word; font-size:13px; color:#cfe9ff}
+    .line .tag{color:#a7f0ff}
+    .line .time{color:#6fa7bd}
+    .line.warn{color:#ffe9b0}
+    .line.err{color:#ffb0b8}
+    /* Sections */
+    section{margin-top:56px}
+    .section-h{
+      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px
+    }
+    .section-h h3{margin:0; font-size:22px; letter-spacing:.4px}
+    .grid{
+      display:grid; gap:16px;
+      grid-template-columns:repeat(12, 1fr);
+    }
+    .card{
+      grid-column: span 4; min-height: 190px;
+      border:1px solid rgba(255,255,255,0.08); border-radius:16px; overflow:hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+      transition: transform .12s ease, border-color .12s ease;
+      position:relative;
+    }
+    .card:hover{transform:translateY(-2px); border-color: rgba(0,224,255,0.25)}
+    .card .body{padding:18px}
+    .card .kicker{color:var(--muted); font-size:12px; letter-spacing:.2px}
+    .card h4{margin:6px 0 8px 0; font-size:18px}
+    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+    .chip{
+      font-family:"IBM Plex Mono", monospace; font-size:11px; color:#cde7ff;
+      border:1px dashed rgba(0,224,255,0.25); padding:5px 8px; border-radius:999px;
+      background: rgba(0,224,255,0.05);
+    }
+    @media (max-width:1100px){
+      .card{grid-column: span 6}
+    }
+    @media (max-width:700px){
+      .card{grid-column: span 12}
+    }
+    /* Footer */
+    footer{
+      margin-top:64px; padding:24px; color:var(--muted); font-size:14px; border-top:1px solid rgba(255,255,255,0.06)
+    }
+    .links{display:flex; gap:16px; flex-wrap:wrap}
+    /* Accent underline effect */
+    .u{
+      background: linear-gradient(120deg, rgba(0,224,255,0.35), rgba(157,108,255,0.35));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-shadow: 0 0 18px rgba(0,224,255,0.15);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="dot"></div>
+        <h1>vishwajeetdabholkar.ai</h1>
+      </div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#work">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contrib">Open Source</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <div class="hero-card scanline">
+        <h2 class="title">I build <span class="u">Agentic AI</span>, <span class="u">MCP servers/clients</span>, and <span class="u">real-time RAG</span> systems.</h2>
+        <p class="subtitle">
+          Solutions Engineer passionate about <span class="u">building verifiable AI systems</span>. I create MCP servers/clients, browser automation agents with Playwright, and production-ready RAG systems using real-time data streams. Everything backed by open source code and live demos.
+        </p>
+        <div class="badges">
+          <div class="badge">Agentic AI</div>
+          <div class="badge">MCP (Servers/Clients)</div>
+          <div class="badge">Real-time RAG</div>
+          <div class="badge">Web Scraping</div>
+          <div class="badge">Playwright</div>
+          <div class="badge">SingleStore Vectors</div>
+        </div>
+        <div class="cta">
+          <a class="btn" href="#work">Explore projects →</a>
+          <a class="btn alt" href="#contact">Work with me</a>
+        </div>
+      </div>
+
+      <div class="console" aria-label="agent console">
+        <div class="hdr"><span class="led"></span> AGENT://run v0.9 • online</div>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+
+    <section id="about">
+      <div class="section-h">
+        <h3>About Me</h3>
+        <small style="color:var(--muted)">Solutions Engineer & Data Engineer</small>
+      </div>
+      <div style="max-width:900px">
+        <p style="font-size:16px;line-height:1.7;color:var(--text);margin-bottom:16px">
+          I'm a <strong>Solutions Engineer</strong> at Confluent, specializing in building real-time data streaming and AI solutions. My work focuses on creating intelligent systems that combine <strong>Agentic AI</strong>, <strong>Model Context Protocol (MCP)</strong>, and <strong>Real-time RAG</strong> to solve complex problems.
+        </p>
+        <p style="font-size:16px;line-height:1.7;color:var(--muted);margin-bottom:16px">
+          I build production-ready systems using Kafka, Flink, SingleStore, and various AI frameworks. My passion is creating open-source tools and protocols that make AI agents more useful and verifiable. From browser automation with Playwright to vector databases and hybrid search, I focus on shipping working code and demos.
+        </p>
+        <p style="font-size:16px;line-height:1.7;color:var(--muted)">
+          Based in Pune/Kolhapur, India • Available for consulting and collaborative projects
+        </p>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="section-h">
+        <h3>Featured Projects</h3>
+        <small style="color:var(--muted)">Across Agentic AI, MCP protocol, RAG, and data engineering</small>
+      </div>
+      <div class="grid">
+        <!-- MCP Server + Client -->
+        <article class="card">
+          <div class="body">
+            <div class="kicker">Protocol Engineering</div>
+            <h4>MCP Servers and Clients</h4>
+            <p>Build and customize both MCP servers and MCP clients — so agents really “control your browser”, extract, and query. Integrations for Playwright, Claude, Ollama, and more. See posts for API walkthroughs, protocol guides, and advanced agent demos.</p>
+            <div class="chips">
+              <span class="chip">MCP</span><span class="chip">Server</span><span class="chip">Client</span><span class="chip">Playwright</span>
+            </div>
+            <p style="margin-top:12px">
+              <a href="https://github.com/vishwajeetdabholkar/eget_mcp" target="_blank">GitHub →</a>
+              <a href="https://www.linkedin.com/posts/vishwajeetdabholkar_github-microsoftplaywright-mcp-playwright-activity-7377401966349602816-i7wO" target="_blank">LinkedIn post →</a>
+              <a href="https://playbooks.com/mcp/vishwajeetdabholkar-web-scraper" target="_blank">Playbooks Playground →</a>
+            </p>
+          </div>
+        </article>
+        <!-- eGet Web Scraper MCP -->
+        <article class="card">
+          <div class="body">
+            <div class="kicker">Agentic AI • RAG Tooling</div>
+            <h4>eGet Web Scraper + MCP</h4>
+            <p>Local-first web scraper extracting markdown, JSON, and table content — driven via MCP plug for instant Q&A and RAG ingestion. Browser-based agents for docsites and API data. Demo links show it working with Claude/MCP, Playwright, and Ollama.</p>
+            <div class="chips">
+              <span class="chip">FastAPI</span><span class="chip">Markdown</span><span class="chip">Playwright</span><span class="chip">MCP</span>
+            </div>
+            <p style="margin-top:12px"><a href="https://github.com/vishwajeetdabholkar/eGet-Crawler-for-ai" target="_blank">GitHub →</a>
+              <a href="https://www.linkedin.com/posts/vishwajeetdabholkar_ai-automation-mcp-activity-7377970431443587072-wcCo" target="_blank">LinkedIn Demo →</a>
+              <a href="https://www.linkedin.com/in/vishwajeetdabholkar/recent-activity/all/" target="_blank">All LinkedIn activity →</a>
+            </p>
+          </div>
+        </article>
+        <!-- Real-time RAG Agents -->
+        <article class="card">
+          <div class="body">
+            <div class="kicker">Active RAG / Vectors</div>
+            <h4>Real-time RAG Systems</h4>
+            <p>Real-time retrieval augmented generation: connect semantic + SQL queries, hybrid search, and analytics using SingleStore vectors. See deep dives, blog posts, and live code on high-frequency use cases that go beyond “search + LLM.”</p>
+            <div class="chips">
+              <span class="chip">Real-time RAG</span><span class="chip">SingleStore</span><span class="chip">Vectors</span><span class="chip">Hybrid Query</span>
+            </div>
+            <p style="margin-top:12px">
+              <a href="https://github.com/vishwajeetdabholkar/Pyspark-read-data-from-AWS-S3" target="_blank">GitHub (PySpark+S3) →</a>
+              <a href="https://www.linkedin.com/posts/vishwajeetdabholkar_this-is-a-good-read-rag-will-be-there-but-activity-7326908912031449089-OhEn" target="_blank">LinkedIn RAG Insights →</a>
+              <a href="https://www.singlestore.com/blog/protectos-gptguard-uses-singlestore-vectors-to-overcome-rag-limitations/" target="_blank">Blog →</a>
+            </p>
+          </div>
+        </article>
+        <!-- Resume Parser API -->
+        <article class="card">
+          <div class="body">
+            <div class="kicker">AI Utility • Open Source</div>
+            <h4>Resume Parser API</h4>
+            <p>OCR + LLM-driven parser generating structured JSON, ready for ATS and HR flows. Extraction, embedding, and public docs. See LinkedIn posts for API code and integration walkthroughs.</p>
+            <div class="chips">
+              <span class="chip">FastAPI</span><span class="chip">OCR</span><span class="chip">Embeddings</span><span class="chip">Open Source</span>
+            </div>
+            <p style="margin-top:12px"><a href="https://www.linkedin.com/posts/vishwajeetdabholkar_opensource-api-python-activity-7262149678215950336-4poB" target="_blank">LinkedIn Announcement →</a></p>
+          </div>
+        </article>
+        <!-- Druid tools -->
+        <article class="card">
+          <div class="body">
+            <div class="kicker">Agent Toolkit</div>
+            <h4>Druid Tools for Agents</h4>
+            <p>Agent-safe Druid introspection and SQL execution — sample, stats, and query guardrails inside agent flows for real production workloads.</p>
+            <div class="chips">
+              <span class="chip">Apache Druid</span><span class="chip">phidata/Agno</span><span class="chip">Tooling</span>
+            </div>
+            <p style="margin-top:12px"><a href="https://www.linkedin.com/posts/vishwajeetdabholkar_agenticai-opensource-ai-activity-7258025739415916544-uQDy" target="_blank">LinkedIn Post →</a></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="section-h">
+        <h3>Skills & Technologies</h3>
+        <small style="color:var(--muted)">Core competencies and tools</small>
+      </div>
+      <div class="grid">
+        <article class="card" style="grid-column:span 3">
+          <div class="body">
+            <h4 style="color:var(--accent)">AI & ML</h4>
+            <div class="chips">
+              <span class="chip">Agentic AI</span>
+              <span class="chip">LLMs</span>
+              <span class="chip">RAG</span>
+              <span class="chip">Embeddings</span>
+              <span class="chip">Prompt Engineering</span>
+            </div>
+          </div>
+        </article>
+        <article class="card" style="grid-column:span 3">
+          <div class="body">
+            <h4 style="color:var(--accent)">Protocols & Agents</h4>
+            <div class="chips">
+              <span class="chip">MCP</span>
+              <span class="chip">Claude</span>
+              <span class="chip">Ollama</span>
+              <span class="chip">Playwright</span>
+              <span class="chip">Browser Automation</span>
+            </div>
+          </div>
+        </article>
+        <article class="card" style="grid-column:span 3">
+          <div class="body">
+            <h4 style="color:var(--accent)">Data Engineering</h4>
+            <div class="chips">
+              <span class="chip">Kafka</span>
+              <span class="chip">Flink</span>
+              <span class="chip">PySpark</span>
+              <span class="chip">Apache Druid</span>
+              <span class="chip">Real-time Streaming</span>
+            </div>
+          </div>
+        </article>
+        <article class="card" style="grid-column:span 3">
+          <div class="body">
+            <h4 style="color:var(--accent)">Databases & Storage</h4>
+            <div class="chips">
+              <span class="chip">SingleStore</span>
+              <span class="chip">Vector DBs</span>
+              <span class="chip">MongoDB</span>
+              <span class="chip">AWS S3</span>
+              <span class="chip">Hybrid Search</span>
+            </div>
+          </div>
+        </article>
+        <article class="card" style="grid-column:span 6">
+          <div class="body">
+            <h4 style="color:var(--accent)">Development & Tools</h4>
+            <div class="chips">
+              <span class="chip">Python</span>
+              <span class="chip">FastAPI</span>
+              <span class="chip">JavaScript</span>
+              <span class="chip">TypeScript</span>
+              <span class="chip">Git</span>
+              <span class="chip">Docker</span>
+              <span class="chip">REST APIs</span>
+            </div>
+          </div>
+        </article>
+        <article class="card" style="grid-column:span 6">
+          <div class="body">
+            <h4 style="color:var(--accent)">Frameworks & Platforms</h4>
+            <div class="chips">
+              <span class="chip">phidata/Agno</span>
+              <span class="chip">Confluent Cloud</span>
+              <span class="chip">AWS</span>
+              <span class="chip">Web Scraping</span>
+              <span class="chip">OCR</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contrib">
+      <div class="section-h">
+        <h3>Open Source & Community</h3>
+        <small style="color:var(--muted)">
+          Source code, protocol guides, and live agent demos.
+        </small>
+      </div>
+      <div class="grid">
+        <article class="card" style="grid-column:span 6">
+          <div class="body">
+            <div class="kicker">Frameworks</div>
+            <h4>phidata → Agno</h4>
+            <p>Hands on with agent frameworks and UI — contributed open source tooling for business-actual agents and live database integrations.</p>
+            <div class="chips"><span class="chip">Agno</span><span class="chip">Agent UI</span><span class="chip">Tools</span></div>
+            <p style="margin-top:12px"><a href="https://docs.phidata.com" target="_blank">Docs →</a></p>
+          </div>
+        </article>
+        <article class="card" style="grid-column:span 6">
+          <div class="body">
+            <div class="kicker">Protocols</div>
+            <h4>MCP Server Listing</h4>
+            <p>
+              MCP server for web scraping and agent protocols. Compatible with Claude Desktop, Playwright agents, and Ollama API. Explore recent agent demos on my <a href="https://www.linkedin.com/in/vishwajeetdabholkar/recent-activity/all/" target="_blank">LinkedIn</a>.
+            </p>
+            <div class="chips"><span class="chip">MCP</span><span class="chip">Claude</span><span class="chip">Local</span></div>
+            <p style="margin-top:12px"><a href="https://www.pulsemcp.com/servers/vishwajeetdabholkar-web-scraper" target="_blank">MCP Listing →</a></p>
+          </div>
+        </article>
+      </div>
+      <div style="margin-top:34px;color:var(--muted)">
+        <a href="https://www.linkedin.com/in/vishwajeetdabholkar/recent-activity/all/" target="_blank">See my latest posts, agent demos, MCP protocol walkthroughs, and code drops on LinkedIn →</a>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="section-h">
+        <h3>Get in touch</h3>
+        <small style="color:var(--muted)">
+          Custom agent builds, protocol integrations, consulting.
+        </small>
+      </div>
+      <div class="grid">
+        <article class="card" style="grid-column:span 6">
+          <div class="body">
+            <div class="kicker">Collab/Dev</div>
+            <h4>Consulting & Integrations</h4>
+            <p>
+              Available for sprints or ongoing work: agent protocols, MCP connectors, RAG, live scraping and data flows. Email, DM, or direct message.
+            </p>
+            <p style="margin-top:12px">
+              <a href="mailto:hello@vishwajeetdabholkar.ai">hello@vishwajeetdabholkar.ai</a><br>
+              <a href="https://www.linkedin.com/in/vishwajeetdabholkar/recent-activity/all/" target="_blank">LinkedIn: Recent activity →</a>
+            </p>
+          </div>
+        </article>
+        <article class="card" style="grid-column:span 6">
+          <div class="body">
+            <div class="kicker">Profiles</div>
+            <h4>Links</h4>
+            <p>
+              <a href="https://www.linkedin.com/in/vishwajeetdabholkar" target="_blank">LinkedIn</a> •
+              <a href="https://github.com/vishwajeetdabholkar" target="_blank">GitHub</a> •
+              <a href="https://x.com/vishawajeet5002" target="_blank">X</a>
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span id="yr"></span> Vishwajeet Dabholkar • Pune/Kolhapur • Shipping next-level MCP systems and agentic AI</div>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    
+    // Synthetic agent workflow logs in the hero console
+    const lines = [
+      {t:'[00:00:01] MCP', m:'Server/Client online — Playwright, Claude, Ollama linked', c:'tag'},
+      {t:'[00:00:02] plan', m:'task: docsite ingest → chunk → embed → hybrid RAG index', c:''},
+      {t:'[00:00:03] agent', m:'browser agent / live data extraction / cost guardrails', c:'tag'},
+      {t:'[00:00:04] rpc',   m:'protocol: MCP message flow — realtime latency tracked', c:''},
+      {t:'[00:00:05] vector', m:'SingleStore: semantic+SQL hybrid retrieval pipelined', c:''},
+      {t:'[00:00:06] emit', m:'output: markdown + JSON + traces stored', c:''},
+    ];
+    const log = document.getElementById('log');
+    let i = 0;
+    function pushLine(){
+      if(i>=lines.length) return;
+      const L = lines[i++];
+      const div = document.createElement('div');
+      div.className = 'line' + (L.c==='warn' ? ' warn' : L.c==='err' ? ' err' : '');
+      div.innerHTML = `<span class="time">${L.t}</span> <span class="${L.c==='tag'?'tag':''}">${L.m}</span>`;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+      setTimeout(pushLine, 640);
+    }
+    setTimeout(pushLine, 370);
+
+    // Active navigation highlighting based on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+    
+    function setActiveNav() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (window.scrollY >= (sectionTop - 200)) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+          link.classList.add('active');
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', setActiveNav);
+    setActiveNav(); // Set initial active state
+  </script>
+</body>
+</html>
